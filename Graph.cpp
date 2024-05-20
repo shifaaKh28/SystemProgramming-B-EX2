@@ -1,5 +1,5 @@
-//email: shifaaKhatib28@gmail.com
-//id: 324095702
+// email: shifaaKhatib28@gmail.com
+// id: 324095702
 #include "Graph.hpp"
 namespace ariel
 {
@@ -154,4 +154,333 @@ namespace ariel
         return neighbors;
     }
 
+    /*part 2: operator overloading*/
+    Graph Graph::operator+(const Graph &g) const
+    {
+        if (adjMatrix.size() != g.adjMatrix.size())
+        {
+            throw invalid_argument("Graphs must be of the same size to add.");
+        }
+
+        Graph result; // Create a new graph object to store the result
+
+        // Initialize the adjacency matrix of the result graph with the same size as the current graph's adjacency matrix,
+        // and fill it with zeros.
+        result.adjMatrix = vector<vector<int>>(adjMatrix.size(), vector<int>(adjMatrix.size(), 0));
+        result.isDirected = isDirected; // Assuming both graphs have the same direction property
+
+        for (size_t i = 0; i < adjMatrix.size(); i++)
+        {
+            for (size_t j = 0; j < adjMatrix[i].size(); ++j)
+            {
+                result.adjMatrix[i][j] = adjMatrix[i][j] + g.adjMatrix[i][j];
+            }
+        }
+
+        return result;
+    }
+
+    Graph Graph::operator-(const Graph &g) const
+    {
+        if (adjMatrix.size() != g.adjMatrix.size())
+        {
+            throw invalid_argument("Graphs must be of the same size to subtract.");
+        }
+
+        Graph result; // Create a new graph object to store the result
+        result.adjMatrix = vector<vector<int>>(adjMatrix.size(), vector<int>(adjMatrix.size(), 0));
+        result.isDirected = isDirected; // Assuming both graphs have the same direction property
+
+        for (size_t i = 0; i < adjMatrix.size(); ++i)
+        {
+            for (size_t j = 0; j < adjMatrix[i].size(); ++j)
+            {
+                result.adjMatrix[i][j] = adjMatrix[i][j] - g.adjMatrix[i][j];
+            }
+        }
+
+        return result;
+    }
+
+    Graph Graph::operator+() const
+    {
+        // Create a copy of the current graph
+        Graph result = *this;
+        return result;
+    }
+
+    Graph Graph::operator-() const
+    {
+        Graph result; // Create a new graph object to store the result
+
+        // Initialize the adjacency matrix of the result graph with the same size as the current graph's adjacency matrix
+        // and fill it with zeros.
+        result.adjMatrix = vector<vector<int>>(adjMatrix.size(), vector<int>(adjMatrix.size(), 0));
+        result.isDirected = isDirected; // Assuming both graphs have the same direction property
+
+        // Negate the weights of the edges in the adjacency matrix
+        for (size_t i = 0; i < adjMatrix.size(); ++i)
+        {
+            for (size_t j = 0; j < adjMatrix[i].size(); ++j)
+            {
+                result.adjMatrix[i][j] = -adjMatrix[i][j];
+            }
+        }
+
+        // Return the result graph
+        return result;
+    }
+
+    Graph &Graph::operator+=(const Graph &g)
+    {
+        if (adjMatrix.size() != g.adjMatrix.size())
+        {
+            throw invalid_argument("Graphs must be of the same size to add.");
+        }
+
+        for (size_t i = 0; i < adjMatrix.size(); ++i)
+        {
+            for (size_t j = 0; j < adjMatrix[i].size(); ++j)
+            {
+                adjMatrix[i][j] += g.adjMatrix[i][j];
+            }
+        }
+
+        return *this; // Return a reference to the modified object
+    }
+
+    Graph &Graph::operator-=(const Graph &g)
+    {
+        if (adjMatrix.size() != g.adjMatrix.size())
+        {
+            throw invalid_argument("Graphs must be of the same size to add.");
+        }
+
+        for (size_t i = 0; i < adjMatrix.size(); ++i)
+        {
+            for (size_t j = 0; j < adjMatrix[i].size(); ++j)
+            {
+                adjMatrix[i][j] -= g.adjMatrix[i][j];
+            }
+        }
+
+        return *this; // Return a reference to the modified object
+    }
+
+    Graph &Graph::operator++()
+    {
+        for (size_t i = 0; i < adjMatrix.size(); ++i)
+        {
+            for (size_t j = 0; j < adjMatrix[i].size(); ++j)
+            {
+                if (i != j)
+                {
+                    ++adjMatrix[i][j]; // Increment non-diagonal elements by 1
+                }
+            }
+        }
+        return *this;
+    }
+
+    Graph Graph::operator++(int)
+    {
+        // Create a copy of the current graph
+        Graph copy(*this);
+        // Increment the current graph using the pre-increment operator
+        ++(*this);
+        // Return the copy of the graph as it was before the increment operation
+        return copy;
+    }
+
+    Graph &Graph::operator--()
+    {
+        for (size_t i = 0; i < adjMatrix.size(); ++i)
+        {
+            for (size_t j = 0; j < adjMatrix[i].size(); ++j)
+            {
+                if (i != j)
+                {
+                    --adjMatrix[i][j]; // Increment non-diagonal elements by 1
+                }
+            }
+        }
+        return *this;
+    }
+
+    Graph Graph::operator--(int)
+    {
+        // Create a copy of the current graph
+        Graph copy(*this);
+        // Increment the current graph using the pre-increment operator
+        --(*this);
+        // Return the copy of the graph as it was before the increment operation
+        return copy;
+    }
+
+    Graph Graph::operator*(int scalar) const
+    {
+        Graph result(*this); // Create a copy of the current graph
+
+        // Multiply each edge weight by the scalar
+        for (size_t i = 0; i < result.adjMatrix.size(); ++i)
+        {
+            for (size_t j = 0; j < result.adjMatrix[i].size(); ++j)
+            {
+                result.adjMatrix[i][j] *= scalar;
+            }
+        }
+
+        return result;
+    }
+    Graph &Graph::operator*=(int scalar)
+    {
+        for (size_t i = 0; i < adjMatrix.size(); ++i)
+        {
+            for (size_t j = 0; j < adjMatrix[i].size(); ++j)
+            {
+                adjMatrix[i][j] *= scalar;
+            }
+        }
+        return *this;
+    }
+
+    Graph Graph::operator*(const Graph &g) const
+    {
+        // Check if the sizes of the two graphs are the same
+        if (adjMatrix.size() != g.adjMatrix.size())
+        {
+            throw invalid_argument("Graphs must be of the same size to multiply.");
+        }
+
+        // Initialize result graph with the same size
+        Graph result(*this);
+
+        // Perform matrix multiplication
+        for (size_t i = 0; i < adjMatrix.size(); i++)
+        {
+            for (size_t j = 0; j < adjMatrix.size(); j++)
+            {
+                // Initialize result element to 0
+                result.adjMatrix[i][j] = 0;
+
+                // Calculate the value for the element result[i][j]
+                for (size_t k = 0; k < adjMatrix.size(); k++)
+                {
+                    result.adjMatrix[i][j] += this->adjMatrix[i][k] * g.adjMatrix[k][j];
+                }
+
+                // Ensure the diagonal elements are zero
+                if (i == j)
+                {
+                    result.adjMatrix[i][j] = 0;
+                }
+            }
+        }
+        return result;
+    }
+
+    bool Graph::operator==(const Graph &g) const
+    {
+        // Check if the sizes of the two adjacency matrices are the same
+        if (adjMatrix.size() != g.adjMatrix.size())
+        {
+            return false;
+        }
+
+        // Compare each element of the adjacency matrices
+        for (size_t i = 0; i < adjMatrix.size(); ++i)
+        {
+            for (size_t j = 0; j < adjMatrix[i].size(); ++j)
+            {
+                if (adjMatrix[i][j] != g.adjMatrix[i][j])
+                {
+                    return false; // If any element differs, the graphs are not equal
+                }
+            }
+        }
+
+        return true; // All elements are the same, the graphs are equal
+    }
+
+    bool Graph::operator!=(const Graph &g) const
+    {
+        return !(*this == g);
+    }
+
+    bool isContained(const Graph &g1, const Graph &g2)
+    {
+        // Checking if g1 is contained in g2, we'll go over g1 and check if all the values are in g2
+        for (size_t i = 0; i < g1.adjMatrix.size(); i++)
+        {
+            for (size_t j = 0; j < g1.adjMatrix.size(); j++)
+            {
+                if (g1.adjMatrix[i][j] != 0 && g2.adjMatrix[i][j] == 0)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    bool Graph::operator>(const Graph &g) const
+    {
+        // Use the helper function to check if the current graph (this) is contained in g
+        if (isContained(*this, g))
+        {
+            return false; // If this is contained in g, then this is not greater than g
+        }
+
+        // Use the helper function to check if g is contained in the current graph (this)
+        if (isContained(g, *this))
+        {
+            return true; // If g is contained in this, then this is greater than g
+        }
+
+        // If neither graph is contained in the other, compare the number of edges
+        int edgesThis = 0;
+        int edgesOther = 0;
+        for (size_t i = 0; i < adjMatrix.size(); ++i)
+        {
+            for (size_t j = 0; j < adjMatrix[i].size(); ++j)
+            {
+                edgesThis += (adjMatrix[i][j] != 0) ? 1 : 0;
+                edgesOther += (g.adjMatrix[i][j] != 0) ? 1 : 0;
+            }
+        }
+
+        if (edgesThis != edgesOther)
+        {
+            return edgesThis > edgesOther;
+        }
+
+        // If the number of edges is the same, compare the magnitudes of the adjacency matrices
+        int magnitudeThis = 0;
+        int magnitudeOther = 0;
+        for (size_t i = 0; i < adjMatrix.size(); ++i)
+        {
+            for (size_t j = 0; j < adjMatrix[i].size(); ++j)
+            {
+                magnitudeThis += adjMatrix[i][j];
+                magnitudeOther += g.adjMatrix[i][j];
+            }
+        }
+        return magnitudeThis > magnitudeOther;
+    }
+
+    bool Graph::operator<(const Graph &g) const
+    {
+        // Use the greater-than operator to check if other is greater than *this
+        return g > *this;
+    }
+
+    bool Graph::operator<=(const Graph &g) const
+    {
+        return !(*this > g);
+    }
+
+    bool Graph::operator>=(const Graph &g) const
+    {
+        return !(*this < g);
+    }
 }

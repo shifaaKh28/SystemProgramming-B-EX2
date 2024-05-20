@@ -88,6 +88,38 @@ namespace ariel
 
         /*get the neighbors of vertex in the graph*/
         vector<int> getNeighbors(size_t v);
+
+        /* part2: Operator overloading*/
+
+        // Arithmetic operators
+        Graph operator+(const Graph &g) const;
+        Graph &operator+=(const Graph &g);
+        Graph operator+() const;
+
+        Graph operator-(const Graph &g) const;
+        Graph &operator-=(const Graph &g);
+        Graph operator-() const;
+
+        // Comparison operators
+        bool operator==(const Graph &g) const;
+        bool operator!=(const Graph &g) const;
+        bool operator>(const Graph &g) const;
+        bool operator>=(const Graph &g) const;
+        bool operator<(const Graph &g) const;
+        bool operator<=(const Graph &g) const;
+
+        // Increment and decrement operators
+        Graph &operator++();   // Pre-increment
+        Graph operator++(int); // Post-increment
+        Graph &operator--();   // Pre-decrement
+        Graph operator--(int); // Post-decrement
+
+        // Multiplication by an integer scalar
+        Graph operator*(int scalar) const;
+        Graph &operator*=(int scalar);
+
+        // Graph multiplication
+        Graph operator*(const Graph &other) const;
     };
 
 } // namespace ariel

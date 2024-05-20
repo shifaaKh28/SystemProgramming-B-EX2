@@ -1,5 +1,5 @@
-//email: shifaaKhatib28@gmail.com
-//id: 324095702
+# //email: shifaaKhatib28@gmail.com
+# //id: 324095702
 
 CXX=clang++
 CXXFLAGS=-std=c++11 -Werror -g -Wsign-conversion

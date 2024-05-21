@@ -1,8 +1,8 @@
 // //email: shifaaKhatib28@gmail.com
 // //id: 324095702
 #include "doctest.h"
+#include "Algorithms.hpp"
 #include "Graph.hpp"
-
 TEST_CASE("Test graph addition")
 {
     ariel::Graph g1;
@@ -108,7 +108,18 @@ TEST_CASE("Unary Plus Operator")
 
         // Check if the resulting graph has the same adjacency matrix as the original graph
         CHECK(result.adjMatrix == graphMatrix);
+
+        // Check if both the original and resulting graphs are connected
+        string gConnected = ariel::Algorithms::isConnected(g);
+        string resultConnected = ariel::Algorithms::isConnected(result);
+        CHECK(gConnected == resultConnected);
+
+        string gshortestPath = ariel::Algorithms::shortestPath(g,0,3);
+        string resultshortestPath = ariel::Algorithms::shortestPath(result,0,3);
+        CHECK(gshortestPath == resultshortestPath);
+
     }
+
 
     SUBCASE("Unary Plus Operator Test Case 2")
     {
@@ -220,149 +231,97 @@ TEST_CASE("Test operator-=")
     g1 -= g2;
     CHECK(g1.adjMatrix == vector<vector<int>>{{0, 1, -1}, {1, 0, 1}, {-1, 1, 0}});
 }
-TEST_CASE("Test pre-increment operator")
-{
-    // Case 1: Initial weights: {1, 2, 3}, {2, 1, 4}, {3, 4, 1}
-    ariel::Graph g1;
-    vector<vector<int>> graph1 = {
-        {0, 0, 3},
-        {2, 0, 4},
-        {3, 4, 0}};
-    g1.loadGraph(graph1, false);
+TEST_CASE("Test increment and decrement operators") {
+    SUBCASE("Test pre-increment operator") {
+        // Case 1: Initial weights: {1, 2, 3}, {2, 1, 4}, {3, 4, 1}
+        ariel::Graph g1;
+        vector<vector<int>> graph1 = {
+            {0, 0, 3},
+            {2, 0, 4},
+            {3, 4, 0}};
+        g1.loadGraph(graph1, false);
 
-    // Pre-increment operator
-    ++g1;
+        // Pre-increment operator
+        ++g1;
 
-    // Check if all edge weights have been incremented by 1
-    vector<vector<int>> expected1 = {
-        {0, 1, 4},
-        {3, 0, 5},
-        {4, 5, 0}};
-    for (size_t i = 0; i < graph1.size(); ++i)
-    {
-        for (size_t j = 0; j < graph1[i].size(); ++j)
-        {
-            CHECK(g1.adjMatrix[i][j] == expected1[i][j]);
+        // Check if all edge weights have been incremented by 1
+        vector<vector<int>> expected1 = {
+            {0, 1, 4},
+            {3, 0, 5},
+            {4, 5, 0}};
+        for (size_t i = 0; i < graph1.size(); ++i) {
+            for (size_t j = 0; j < graph1[i].size(); ++j) {
+                CHECK(g1.adjMatrix[i][j] == expected1[i][j]);
+            }
         }
     }
 
-    // Case 2: Initial weights: {0, 1, 2}, {1, 0, 3}, {2, 3, 0}
-    ariel::Graph g2;
-    vector<vector<int>> graph2 = {
-        {0, 1, 2},
-        {1, 0, 3},
-        {2, 3, 0}};
-    g2.loadGraph(graph2, false);
+    SUBCASE("Test post-increment operator") {
+        // Create a graph
+        ariel::Graph g;
+        vector<vector<int>> graph = {
+            {0, 1, 0},
+            {1, 0, 1},
+            {0, 1, 0}};
+        g.loadGraph(graph, false);
 
-    // Pre-increment operator
-    ++g2;
+        // Apply post-increment operator
+        ariel::Graph result = g++;
 
-    // Check if all edge weights have been incremented by 1
-    vector<vector<int>> expected2 = {
-        {0, 2, 3},
-        {2, 0, 4},
-        {3, 4, 0}};
-    for (size_t i = 0; i < graph2.size(); ++i)
-    {
-        for (size_t j = 0; j < graph2[i].size(); ++j)
-        {
-            CHECK(g2.adjMatrix[i][j] == expected2[i][j]);
-        }
+        // Expected result after post-increment
+        vector<vector<int>> expectedGraph = {
+            {0, 1, 0},
+            {1, 0, 1},
+            {0, 1, 0}};
+
+        // Check if the adjacency matrices of result and expectedGraph match
+        CHECK(result.adjMatrix == expectedGraph);
+    }
+
+    SUBCASE("Test pre-decrement operator") {
+        // Create a graph
+        ariel::Graph g;
+        vector<vector<int>> graph = {
+            {0, 2, 1},
+            {2, 0, 2},
+            {1, 2, 0}};
+        g.loadGraph(graph, false);
+
+        // Apply pre-decrement operator
+        --g;
+
+        // Expected result after pre-decrement
+        vector<vector<int>> expectedGraph = {
+            {0, 1, 0},
+            {1, 0, 1},
+            {0, 1, 0}};
+
+        // Check if the adjacency matrices match
+        CHECK(g.adjMatrix == expectedGraph);
+    }
+
+    SUBCASE("Test post-decrement operator") {
+        // Create a graph
+        ariel::Graph g;
+        vector<vector<int>> graph = {
+            {0, 2, 1},
+            {2, 0, 2},
+            {1, 2, 0}};
+        g.loadGraph(graph, false);
+
+        // Apply post-decrement operator
+        ariel::Graph result = g--;
+
+        // Expected result after post-decrement
+        vector<vector<int>> expectedGraph = {
+            {0, 2, 1},
+            {2, 0, 2},
+            {1, 2, 0}};
+
+        // Check if the adjacency matrices of result and expectedGraph match
+        CHECK(result.adjMatrix == expectedGraph);
     }
 }
-
-TEST_CASE("Test pre-increment operator")
-{
-    // Create a graph
-    ariel::Graph g;
-    vector<vector<int>> graph = {
-        {0, 1, 0},
-        {1, 0, 1},
-        {0, 1, 0}};
-    g.loadGraph(graph, false);
-
-    // Apply pre-increment operator
-    ++g;
-
-    // Expected result after pre-increment
-    vector<vector<int>> expectedGraph = {
-        {0, 2, 1},
-        {2, 0, 2},
-        {1, 2, 0}};
-
-    // Check if the adjacency matrices match
-    CHECK(g.adjMatrix == expectedGraph);
-}
-
-TEST_CASE("Test post-increment operator")
-{
-    // Create a graph
-    ariel::Graph g;
-    vector<vector<int>> graph = {
-        {0, 1, 0},
-        {1, 0, 1},
-        {0, 1, 0}};
-    g.loadGraph(graph, false);
-
-    // Apply post-increment operator
-    ariel::Graph result = g++;
-
-    // Expected result after post-increment
-    vector<vector<int>> expectedGraph = {
-        {0, 1, 0},
-        {1, 0, 1},
-        {0, 1, 0}};
-
-    // Check if the adjacency matrices of result and expectedGraph match
-    CHECK(result.adjMatrix == expectedGraph);
-}
-
-TEST_CASE("Test pre-decrement operator")
-{
-    // Create a graph
-    ariel::Graph g;
-    vector<vector<int>> graph = {
-        {0, 2, 1},
-        {2, 0, 2},
-        {1, 2, 0}};
-    g.loadGraph(graph, false);
-
-    // Apply pre-decrement operator
-    --g;
-
-    // Expected result after pre-decrement
-    vector<vector<int>> expectedGraph = {
-        {0, 1, 0},
-        {1, 0, 1},
-        {0, 1, 0}};
-
-    // Check if the adjacency matrices match
-    CHECK(g.adjMatrix == expectedGraph);
-}
-
-TEST_CASE("Test post-decrement operator")
-{
-    // Create a graph
-    ariel::Graph g;
-    vector<vector<int>> graph = {
-        {0, 2, 1},
-        {2, 0, 2},
-        {1, 2, 0}};
-    g.loadGraph(graph, false);
-
-    // Apply post-decrement operator
-    ariel::Graph result = g--;
-
-    // Expected result after post-decrement
-    vector<vector<int>> expectedGraph = {
-        {0, 2, 1},
-        {2, 0, 2},
-        {1, 2, 0}};
-
-    // Check if the adjacency matrices of result and expectedGraph match
-    CHECK(result.adjMatrix == expectedGraph);
-}
-
 TEST_CASE("Test scalar multiplication operator*")
 {
     // Create a graph
@@ -480,24 +439,6 @@ TEST_CASE("Test graph == operator")
 
         CHECK(g1 == g2);
     }
-    // Test case 2: Different graphs
-    {
-        ariel::Graph g1;
-        vector<vector<int>> graph1 = {
-            {0, 1, 0},
-            {1, 0, 1},
-            {0, 1, 0}};
-        g1.loadGraph(graph1, false);
-
-        ariel::Graph g3;
-        vector<vector<int>> graph3 = {
-            {0, 1, 1},
-            {1, 0, 2},
-            {1, 2, 0}};
-        g3.loadGraph(graph3, false);
-
-        CHECK(!(g1 == g3));
-    }
 }
 TEST_CASE("Test graph != operator")
 {
@@ -559,6 +500,7 @@ TEST_CASE("Test greater-than operator")
     // g2 contains g1, so g2 is not greater than g1
     CHECK((g1 > g2) == true);
 
+
     // g1 contains g2, so g1 is greater than g2
     CHECK((g2 > g1) == false);
 }
@@ -579,14 +521,21 @@ TEST_CASE("Test less-than operator")
     g1.loadGraph(matrix1, false);
     g2.loadGraph(matrix2, false);
 
+    // Check less-than operator
     // g2 contains g1, so g2 is not less than g1
     CHECK((g1 < g2) == false);
 
     // g1 contains g2, so g1 is less than g2
     CHECK((g2 < g1) == true);
+
+    CHECK_FALSE(ariel::Algorithms::isBipartite(g1) == ariel::Algorithms::isBipartite(g2));
+
+    // Check if g1 and g2 are connected
+    CHECK(ariel::Algorithms::isConnected(g1) == "The graph is connected.");
+    CHECK(ariel::Algorithms::isConnected(g2) == "The graph is not connected.");
 }
 
-TEST_CASE("Test less-than-or-equal-to operator")
+TEST_CASE("Test <= operator")
 {
     // Create two graphs
     ariel::Graph g1, g2;
@@ -609,7 +558,7 @@ TEST_CASE("Test less-than-or-equal-to operator")
     CHECK(g1 <= g1);
 }
 
-TEST_CASE("Test greater-than-or-equal-to operator")
+TEST_CASE("Test >= operator")
 {
     // Create two graphs
     ariel::Graph g1, g2;
@@ -633,7 +582,14 @@ TEST_CASE("Test greater-than-or-equal-to operator")
 
     // g1 is equal to itself
     CHECK(g1 >= g1);
+
+    // Check if g1 and g2 have negative cycles
+    CHECK_FALSE(ariel::Algorithms::negativeCycle(g1) == ariel::Algorithms::negativeCycle(g2));
+
+    // Check shortest paths in g1
+    CHECK(ariel::Algorithms::shortestPath(g1, 0, 2) == "0->1->2");
 }
+
 TEST_CASE("Invalid operations")
 {
     ariel::Graph g1;

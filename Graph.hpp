@@ -120,6 +120,14 @@ namespace ariel
 
         // Graph multiplication
         Graph operator*(const Graph &other) const;
+
+        /**
+         * @brief Overloaded output stream operator for displaying the graph.
+         * @param os The output stream object.
+         * @param g The graph object to be displayed.
+         * @return The output stream object.
+         */
+        friend std::ostream &operator<<(std::ostream &os, const Graph &g);
     };
 
 } // namespace ariel

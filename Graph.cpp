@@ -483,4 +483,16 @@ namespace ariel
     {
         return !(*this < g);
     }
+
+
+std::ostream &operator<<(std::ostream &os, const Graph &g) {
+    os << "Adjacency Matrix:" << std::endl;
+    for (const auto &row : g.adjMatrix) {
+        for (int val : row) {
+            os << val << " ";
+        }
+        os << std::endl;
+    }
+    return os;
+}
 }

@@ -1,77 +1,73 @@
 /*
- * Demo program for Exercise 2.
+ * Demo program for Exercise 3.
  * Author: Benjamin Saldman.
  */
 
 #include "Graph.hpp"
 #include "Algorithms.hpp"
 
+
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-using namespace ariel;
 using namespace std;
+using namespace ariel;
 
-int main()
-{
-    ariel::Graph g;
+
+
+int main() {
+    ariel::Graph g1;
     // 3x3 matrix that represents a connected graph.
     vector<vector<int>> graph = {
         {0, 1, 0},
         {1, 0, 1},
         {0, 1, 0}};
-    g.loadGraph(graph, true); // Load the graph to the object.
+    g1.loadGraph(graph, false);
 
-    g.printGraph();                                    // Should print: "Graph with 3 vertices and 4 edges."
-    cout << Algorithms::isConnected(g) << endl;        // Should print: "1" (true).
-    cout << Algorithms::shortestPath(g, 0, 2) << endl; // Should print: 0->1->2.
-    cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "0" (false).
-    cout << Algorithms::isBipartite(g) << endl;        // Should print: "The graph is bipartite: A={0, 2}, B={1}."
+    cout << g1; 
 
-    // 5x5 matrix that represents a non-connected graph with a cycle.
+    // 3x3 matrix that represents a weighted connected graph.
+    vector<vector<int>> graph1 = {
+        {0, 1, 1},
+        {1, 0, 2},
+        {1, 2, 0}};
+    ariel::Graph g2;
+    g2.loadGraph(graph1, false); 
+
+    ariel::Graph g3 = g1 + g2; // Add the two graphs together.
+    cout << g3; 
+
+    g1 *= -2; // Multiply the graph by -2.
+    cout << g1; 
+
+
+    ariel::Graph g4 = g1 * g2; 
+    cout << g4; 
+
+    ariel::Graph g5;
+    ariel::Graph g6;
+
     vector<vector<int>> graph2 = {
-        {0, 1, 1, 0, 0},
-        {1, 0, 1, 0, 0},
-        {1, 1, 0, 1, 0},
-        {0, 0, 1, 0, 0},
-        {0, 0, 0, 0, 0}};
+        {0, 1, 2},
+        {1, 0, 3},
+        {2, 3, 0}};
 
-    g.loadGraph(graph2, true); // Load the graph to the object.
+    g5.loadGraph(graph2,false);    
 
-    g.printGraph();                                    // Should print: "Graph with 5 vertices and 8 edges."
-    cout << Algorithms::isConnected(g) << endl;        // Should print: "0" (false).
-    cout << Algorithms::shortestPath(g, 0, 4) << endl; // Should print: "-1" (there is no path between 0 and 4).
-    cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "The cycle is: 0->1->2->0".
-    cout << Algorithms::isBipartite(g) << endl;        // Should print: "0" (false).
+        vector<vector<int>> graph3 = {
+        {0, 1, 1},
+        {1, 0, 1},
+        {1, 1, 0}};
+    g6.loadGraph(graph3,false);
 
-    // 5x5 matrix that reprsents a connected weighted graph.
-    vector<vector<int>> graph3 = {
-        {0, 1, 0, 0, 0},
-        {1, 0, 3, 0, 0},
-        {0, 3, 0, 4, 0},
-        {0, 0, 4, 0, 5},
-        {0, 0, 0, 5, 0}};
-    g.loadGraph(graph3, true); // Load the graph to the object.
-
-    g.printGraph();                                    // Should print: "Graph with 5 vertices and 8 edges."
-    cout << Algorithms::isConnected(g) << endl;        // Should print: "1" (true).
-    cout << Algorithms::shortestPath(g, 0, 4) << endl; // Should print: 0->1->2->3->4.
-    cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "0" (false).
-    cout << Algorithms::isBipartite(g) << endl;        // Should print: "The graph is bipartite: A={0, 2, 4}, B={1, 3}."
-
-    // 5x4 matrix that reprsents invalid graph.
-    vector<vector<int>> graph4 = {
-        {0, 1, 2, 0},
-        {1, 0, 3, 0},
-        {2, 3, 0, 4},
-        {0, 0, 4, 0},
-        {0, 0, 0, 5}};
-    try
-    {
-        g.loadGraph(graph4, true); // Load the graph to the object.
+    // Comparison operations
+    if (g5 < g6) {
+        cout << "Graph g5 is less than Graph g6" << endl;
+    } else if (g5 > g6) {
+        cout << "Graph g5 is greater than Graph g6" << endl;
+    } else {
+        cout << "Graph g5 is equal to Graph g6" << endl;
     }
-    catch (const std::invalid_argument &e)
-    {
-        cout << e.what() << endl; // Should print: "Invalid graph: The graph is not a square matrix."
-    }
+
+    return 0;
 }

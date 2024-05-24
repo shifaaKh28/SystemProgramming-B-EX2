@@ -50,6 +50,9 @@ Includes the `doctest` framework for unit testing the implemented operator overl
 ### 6. `test.cpp`
 Includes test cases for all the operator overloads implemented in the `Graph` class. The tests are written using the `doctest` framework.
 
+### 7. Demo.cpp
+A demonstration program showcasing the use of the implemented operator overloads for the Graph class.
+
 ## Test Cases
 
 The tests for these operators are implemented using the `doctest` framework. They are located in the `test.cpp` file and cover all the operator overloads. The tests ensure that the operators work correctly for various scenarios, including equality, comparison, increment/decrement, and arithmetic operations.

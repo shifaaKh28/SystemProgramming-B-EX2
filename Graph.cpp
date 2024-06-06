@@ -486,13 +486,21 @@ namespace ariel
 
 
 std::ostream &operator<<(std::ostream &os, const Graph &g) {
+    // Output the header "Adjacency Matrix:" followed by a newline to indicate the start of the matrix.
     os << "Adjacency Matrix:" << std::endl;
+    
+    // Iterate over each row of the adjacency matrix.
     for (const auto &row : g.adjMatrix) {
+        // Iterate over each value in the current row.
         for (int val : row) {
+            // Output the current value followed by a space.
             os << val << " ";
         }
+        // After all values in the current row have been output, insert a newline to start a new row.
         os << std::endl;
     }
+    
+    // Return the output stream to allow for chaining of output operations.
     return os;
 }
 }

@@ -444,8 +444,8 @@ namespace ariel
         {
             for (size_t j = 0; j < adjMatrix[i].size(); ++j)
             {
-                edgesThis += (adjMatrix[i][j] != 0) ? 1 : 0;
-                edgesOther += (g.adjMatrix[i][j] != 0) ? 1 : 0;
+            edgesThis += (adjMatrix[i][j] != 0) ? 1 : 0; // Count non-zero entries for this graph
+            edgesOther += (g.adjMatrix[i][j] != 0) ? 1 : 0; // Count non-zero entries for the other graph
             }
         }
 

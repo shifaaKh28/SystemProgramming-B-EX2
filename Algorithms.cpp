@@ -11,7 +11,16 @@ namespace ariel
 {
     namespace Algorithms
     {
-
+/**
+ * @brief Depth-first search (DFS) traversal for a graph.
+ *
+ * This function performs a depth-first search traversal of a graph starting from a given vertex.
+ * It marks each visited vertex and recursively visits all unvisited neighbors.
+ *
+ * @param g The graph to be traversed.
+ * @param v The starting vertex for the DFS traversal.
+ * @param visited A vector of booleans indicating whether each vertex has been visited.
+ */
         void dfs_traverse(Graph g, size_t v, vector<bool> &visited)
         {
             // Mark the current vertex as visited

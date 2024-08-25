@@ -5,7 +5,7 @@
 
 This part of the assignment involves implementing and testing several operator overloads for the `Graph` class. The goal is to extend the functionality of the `Graph` class by allowing graph instances to be compared, incremented, and manipulated using standard operators.
 
-## Implemented Operators
+## Implemented Operators:
 
 ### 1. Equality Operators
 - **`bool operator==(const Graph &g) const`**: Checks if two graphs are equal.
